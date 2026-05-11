@@ -106,6 +106,8 @@ http://127.0.0.1:5000/
 
 ### References
 - I used Copilot primarily to help me develop the frontend of this webapp as well as the 'test yourself' feature. See conversations with Copilot: https://copilot.microsoft.com/shares/5d82dokXWCe5WZnnZdMcj & https://copilot.microsoft.com/shares/nGVnTN9Tnyx7wD67YsvNH
+- I used the module video lectures (Andrew Beatty) to write the HTML/Flask with CRUD operations. Also followed the lecturer's guidance to deploy the webapp to Python Anywhere.
+- GeeksForGeeks helped with creating a SQLite database: https://www.geeksforgeeks.org/python/python-sqlite-creating-a-new-database/
 
 ### Author
 Zoe McNamara Harlowe
