@@ -26,14 +26,13 @@ Built with Flask, SQLite, Bootstrap, and JavaScript.
 ## Project Structure
 
 wsaa_project/
-│
-├── app.py               # Main Flask application
-├── words.html           # CRUD interface
-├── test.html            # Quiz page
-├── words.db             # SQLite database
-├── createdb.py          # Database initialisation script
-├── requirements.txt     # Python dependencies
-└── README.md            # Documentation
+- app.py               # Main Flask application
+- words.html           # CRUD interface
+- test.html            # Quiz page
+- words.db             # SQLite database
+- createdb.py          # Database initialisation script
+- requirements.txt     # Python dependencies
+- README.md            # Documentation
 
 ---
 
@@ -105,8 +104,14 @@ http://127.0.0.1:5000/
 - os: https://docs.python.org/3/library/os.html
 - random: https://docs.python.org/3/library/random.html
 
+### References
+- I used Copilot primarily to help me develop the frontend of this webapp as well as the 'test yourself' feature. See conversations with Copilot: https://copilot.microsoft.com/shares/5d82dokXWCe5WZnnZdMcj & https://copilot.microsoft.com/shares/nGVnTN9Tnyx7wD67YsvNH
+
 ### Author
 Zoe McNamara Harlowe
+
 G00473469
+
 Higher Diploma in Computing in Data Analytics
+
 Atlantic Technological University (ATU)
