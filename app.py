@@ -26,19 +26,44 @@ def get_words():
 # CREATE a word
 @app.route('/words', methods=['POST'])
 def add_word():
-    data = request.json
-    irish = data.get("irish")
-    english = data.get("english")
+    data = request.get_json()
+    irish = data.get("irish", "").strip()
+    english = data.get("english", "").strip()
 
     conn = get_db()
-    conn.execute(
-        "INSERT INTO words (irish, english) VALUES (?, ?)",
-        (irish, english)
-    )
+    cursor = conn.cursor()
+
+    # Check if the Irish word already exists
+    cursor.execute("SELECT english FROM words WHERE irish = ?", (irish,))
+    row = cursor.fetchone()
+
+    if row:
+        # Existing meanings
+        existing = row["english"].split(",")
+
+        # New meanings
+        new_meanings = [m.strip() for m in english.split(",")]
+
+        # Merge + deduplicate
+        merged = list(dict.fromkeys([m.strip() for m in existing + new_meanings]))
+
+        # Update the row
+        cursor.execute(
+            "UPDATE words SET english = ? WHERE irish = ?",
+            (", ".join(merged), irish)
+        )
+    else:
+        # Insert new row
+        cursor.execute(
+            "INSERT INTO words (irish, english) VALUES (?, ?)",
+            (irish, english)
+        )
+
     conn.commit()
     conn.close()
 
-    return jsonify({"message": "Word added"}), 201
+    return jsonify({"message": "Word added"})
+
 
 # UPDATE a word
 @app.route('/words/<int:id>', methods=['PUT'])
