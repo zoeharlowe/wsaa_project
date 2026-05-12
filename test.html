@@ -89,6 +89,18 @@
                 document.getElementById("result").innerHTML =
                     "<span class='text-danger'>Try again!</span>";
             }
+            // Save result to database
+            fetch("/save_quiz_result", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    irish: document.getElementById("irishWord").innerText,
+                    english: acceptableAnswers.join(", "),
+                    user_answer: userAnswers.join(", "),
+                    correct: singleCorrect || fullMatch
+                })
+            });
+
         }
         loadWord(); // Load the first word when page opens
     </script>

@@ -96,6 +96,7 @@ def delete_word(id):
 def test_page():
     return send_from_directory(os.getcwd(), "test.html")
 
+# Get a random word from the DB for the quiz
 @app.route("/random_word")
 def random_word():
     conn = get_db()
@@ -107,6 +108,33 @@ def random_word():
 
     word = random.choice(rows)
     return jsonify({"id": word["id"], "irish": word["irish"], "english": word["english"]})
+
+# Save quiz result
+@app.route("/save_quiz_result", methods=["POST"])
+def save_quiz_result():
+    data = request.get_json()
+    irish = data["irish"]
+    english = data["english"]
+    user_answer = data["user_answer"]
+    correct = 1 if data["correct"] else 0
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO quiz_results (irish, english, user_answer, correct)
+        VALUES (?, ?, ?, ?)
+    """, (irish, english, user_answer, correct))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "saved"})
+
+# Serve stats.html
+@app.route("/stats")
+def stats_page():
+    return send_from_directory(os.getcwd(), "stats.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
