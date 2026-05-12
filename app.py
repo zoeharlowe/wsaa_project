@@ -136,5 +136,47 @@ def save_quiz_result():
 def stats_page():
     return send_from_directory(os.getcwd(), "stats.html")
 
+@app.route("/stats_data")
+def stats_data():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Total attempts
+    cursor.execute("SELECT COUNT(*) FROM quiz_results")
+    total = cursor.fetchone()[0]
+
+    # Correct answers
+    cursor.execute("SELECT COUNT(*) FROM quiz_results WHERE correct = 1")
+    correct = cursor.fetchone()[0]
+
+    # Most missed words
+    cursor.execute("""
+        SELECT irish, english, COUNT(*) AS misses
+        FROM quiz_results
+        WHERE correct = 0
+        GROUP BY irish, english
+        ORDER BY misses DESC
+        LIMIT 5
+    """)
+    missed = [dict(row) for row in cursor.fetchall()]
+
+    # Recent attempts
+    cursor.execute("""
+        SELECT irish, english, user_answer, correct, timestamp
+        FROM quiz_results
+        ORDER BY timestamp DESC
+        LIMIT 10
+    """)
+    recent = [dict(row) for row in cursor.fetchall()]
+
+    conn.close()
+
+    return jsonify({
+        "total": total,
+        "correct": correct,
+        "missed": missed,
+        "recent": recent
+    })
+
 if __name__ == "__main__":
     app.run(debug=True)
